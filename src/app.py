@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from recherche_administratives_handicap import recherche_administratives_handicap
+from src.recherche_administratives_handicap import recherche_administratives_handicap
 import os
 from datetime import datetime
 import logging
