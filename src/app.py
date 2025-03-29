@@ -9,13 +9,9 @@ import logging
 # Configuration de l'application
 app = Flask(__name__)
 
-# Configuration CORS (pour permettre les requêtes depuis le frontend)
-# Configuration CORS plus permissive
 CORS(app, resources={r"/api/*": {
-    "origins": [
-        "https://mohamed-ali-sobhi.com/",
-    ],
-    "methods": ["POST", "OPTIONS"],
+    "origins": ["https://mohamed-ali-sobhi.com"],
+    "methods": ["GET", "POST", "OPTIONS"],
     "allow_headers": ["Content-Type", "Authorization"]
 }})
 
