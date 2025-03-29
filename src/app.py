@@ -105,12 +105,5 @@ def health_check():
 
 if __name__ == '__main__':
     # Configuration pour production
-    port = int(os.getenv('PORT', 5000))
-    debug = os.getenv('FLASK_ENV', 'production') == 'development'
-    
-    app.run(
-        host='0.0.0.0',
-        port=port,
-        debug=debug,
-        threaded=True
-    )
+    port = int(os.getenv('PORT', 10000))
+    app.run(host='0.0.0.0', port=port)
