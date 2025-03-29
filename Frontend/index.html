@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handicap - Recherche Administrative</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Recherche Administrative Handicap</h1>
+        
+        <div class="search-section">
+            <textarea 
+                id="questionInput" 
+                placeholder="Posez votre question sur les procédures administratives pour le handicap en France..."
+            ></textarea>
+            <button onclick="performSearch()">Rechercher</button>
+        </div>
+
+        <div id="loading" class="loading hidden">Chargement...</div>
+        
+        <div id="results" class="results hidden">
+            <h2>Résultats</h2>
+            <div id="resultsContent"></div>
+        </div>
+    </div>
+
+    <script src="./script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+</body>
+</html>

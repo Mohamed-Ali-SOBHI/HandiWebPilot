@@ -1,0 +1,76 @@
+2025-03-27 18:03:24,284 - ERROR - Clé API OpenAI non trouvée
+2025-03-27 19:10:13,924 - ERROR - Clé API OpenAI non trouvée
+2025-03-27 19:10:53,432 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.33:5000
+2025-03-27 19:10:53,432 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-27 19:12:00,308 - INFO - 127.0.0.1 - - [27/Mar/2025 19:12:00] "[33mGET / HTTP/1.1[0m" 404 -
+2025-03-27 19:12:00,860 - INFO - 127.0.0.1 - - [27/Mar/2025 19:12:00] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-03-27 19:15:03,001 - INFO - 127.0.0.1 - - [27/Mar/2025 19:15:03] "[33mGET /index.html HTTP/1.1[0m" 404 -
+2025-03-27 19:15:29,556 - INFO - 127.0.0.1 - - [27/Mar/2025 19:15:29] "[33mGET /index HTTP/1.1[0m" 404 -
+2025-03-27 20:32:54,590 - INFO - 127.0.0.1 - - [27/Mar/2025 20:32:54] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-27 20:33:11,057 - INFO - 127.0.0.1 - - [27/Mar/2025 20:33:11] "[33mGET /index HTTP/1.1[0m" 404 -
+2025-03-27 20:33:26,052 - INFO - 127.0.0.1 - - [27/Mar/2025 20:33:26] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-28 11:36:05,109 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.33:5000
+2025-03-28 11:36:05,110 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-28 11:37:29,147 - INFO - 127.0.0.1 - - [28/Mar/2025 11:37:29] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-28 11:39:31,952 - INFO - 127.0.0.1 - - [28/Mar/2025 11:39:31] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-28 11:40:13,809 - INFO - 127.0.0.1 - - [28/Mar/2025 11:40:13] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-28 11:41:07,646 - INFO - 127.0.0.1 - - [28/Mar/2025 11:41:07] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-28 11:41:09,644 - INFO - 127.0.0.1 - - [28/Mar/2025 11:41:09] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-28 11:41:10,271 - INFO - 127.0.0.1 - - [28/Mar/2025 11:41:10] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-28 11:41:19,084 - INFO - 127.0.0.1 - - [28/Mar/2025 11:41:19] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-28 11:55:28,990 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.33:5000
+2025-03-28 11:55:28,991 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-28 11:55:29,001 - INFO -  * Restarting with stat
+2025-03-28 11:55:30,009 - WARNING -  * Debugger is active!
+2025-03-28 11:55:30,021 - INFO -  * Debugger PIN: 104-895-628
+2025-03-28 11:56:15,825 - INFO - 127.0.0.1 - - [28/Mar/2025 11:56:15] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-28 11:56:16,086 - INFO - Recherche initiée: f
+2025-03-28 11:56:20,363 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-28 11:56:20,370 - INFO - Recherche réussie pour: f
+2025-03-28 11:56:20,371 - INFO - 127.0.0.1 - - [28/Mar/2025 11:56:20] "POST /api/search HTTP/1.1" 200 -
+2025-03-28 11:56:52,954 - INFO - 127.0.0.1 - - [28/Mar/2025 11:56:52] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-28 11:56:53,264 - INFO - Recherche initiée: Comment obtenir un accompagnement administratif pour des aménagements au travail ?
+2025-03-28 11:57:06,335 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-28 11:57:06,340 - INFO - Recherche réussie pour: Comment obtenir un accompagnement administratif pour des aménagements au travail ?
+2025-03-28 11:57:06,341 - INFO - 127.0.0.1 - - [28/Mar/2025 11:57:06] "POST /api/search HTTP/1.1" 200 -
+2025-03-28 12:20:20,805 - INFO -  * Detected change in 'C:\\Users\\moham\\OneDrive\\Bureau\\Deepsearch\\src\\recherche_administratives_handicap.py', reloading
+2025-03-28 12:20:21,047 - INFO -  * Restarting with stat
+2025-03-28 12:20:22,362 - WARNING -  * Debugger is active!
+2025-03-28 12:20:22,372 - INFO -  * Debugger PIN: 104-895-628
+2025-03-28 12:21:16,232 - INFO - 127.0.0.1 - - [28/Mar/2025 12:21:16] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-28 12:21:16,493 - INFO - Recherche initiée: Comment obtenir un accompagnement administratif pour des aménagements au travail ?
+2025-03-28 12:21:29,681 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-28 12:21:29,696 - INFO - Recherche réussie pour: Comment obtenir un accompagnement administratif pour des aménagements au travail ?
+2025-03-28 12:21:29,698 - INFO - 127.0.0.1 - - [28/Mar/2025 12:21:29] "POST /api/search HTTP/1.1" 200 -
+2025-03-28 12:23:00,976 - INFO -  * Detected change in 'C:\\Users\\moham\\OneDrive\\Bureau\\Deepsearch\\src\\recherche_administratives_handicap.py', reloading
+2025-03-28 12:23:01,169 - INFO -  * Restarting with stat
+2025-03-28 12:23:02,720 - WARNING -  * Debugger is active!
+2025-03-28 12:23:02,732 - INFO -  * Debugger PIN: 104-895-628
+2025-03-28 12:23:08,759 - INFO -  * Detected change in 'C:\\Users\\moham\\OneDrive\\Bureau\\Deepsearch\\src\\recherche_administratives_handicap.py', reloading
+2025-03-28 12:23:08,946 - INFO -  * Restarting with stat
+2025-03-28 12:23:10,326 - WARNING -  * Debugger is active!
+2025-03-28 12:23:10,337 - INFO -  * Debugger PIN: 104-895-628
+2025-03-28 12:23:18,446 - INFO -  * Detected change in 'C:\\Users\\moham\\OneDrive\\Bureau\\Deepsearch\\src\\recherche_administratives_handicap.py', reloading
+2025-03-28 12:23:18,633 - INFO -  * Restarting with stat
+2025-03-28 12:23:20,047 - WARNING -  * Debugger is active!
+2025-03-28 12:23:20,057 - INFO -  * Debugger PIN: 104-895-628
+2025-03-28 12:23:25,822 - INFO -  * Detected change in 'C:\\Users\\moham\\OneDrive\\Bureau\\Deepsearch\\src\\recherche_administratives_handicap.py', reloading
+2025-03-28 12:23:25,983 - INFO -  * Restarting with stat
+2025-03-28 12:23:27,478 - WARNING -  * Debugger is active!
+2025-03-28 12:23:27,488 - INFO -  * Debugger PIN: 104-895-628
+2025-03-28 12:39:37,290 - INFO - 127.0.0.1 - - [28/Mar/2025 12:39:37] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-28 12:39:37,553 - INFO - Recherche initiée: est ce que le barca a gagné hier
+2025-03-28 12:39:46,140 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-03-28 12:39:46,147 - INFO - Recherche réussie pour: est ce que le barca a gagné hier
+2025-03-28 12:39:46,147 - INFO - 127.0.0.1 - - [28/Mar/2025 12:39:46] "POST /api/search HTTP/1.1" 200 -
+2025-03-28 22:23:00,511 - INFO - 127.0.0.1 - - [28/Mar/2025 22:23:00] "OPTIONS /api/search HTTP/1.1" 200 -
+2025-03-28 22:24:32,695 - INFO - 127.0.0.1 - - [28/Mar/2025 22:24:32] "OPTIONS /api/search HTTP/1.1" 200 -
