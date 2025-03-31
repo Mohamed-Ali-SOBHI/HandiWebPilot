@@ -3,6 +3,24 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
+def generate_search_query(question_utilisateur):
+    """
+    Extrait les mots-clés d'une question utilisateur pour une recherche optimisée.
+    
+    :param question_utilisateur: La question spécifique de l'utilisateur
+    :return: Liste de mots-clés extraits
+    """
+    pass
+
+def generate_response_from_search(response):
+    """
+    Génère une réponse à partir des résultats de recherche.
+    
+    :param response: Résultats de la recherche
+    :return: Réponse formatée
+    """
+    pass
+
 def recherche_administratives_handicap(question_utilisateur):
     """
     Effectue une recherche comprehensive sur les procédures administratives 

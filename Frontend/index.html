@@ -1,34 +1,66 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Handicap - Recherche Administrative</title>
-    <link rel="stylesheet" href="./styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recherche Administrative Handicap</title>
+  <!-- Police moderne -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
+  <header class="site-header">
     <div class="container">
-        <h1>Recherche Administrative Handicap</h1>
-        
-        <div class="search-section">
-            <textarea 
-                id="questionInput" 
-                placeholder="Posez votre question sur les procédures administratives pour le handicap en France..."
-            ></textarea>
-            <button onclick="performSearch()">Rechercher</button>
-        </div>
-
-        <div id="loading" class="loading hidden">Chargement...</div>
-        
-        <div id="results" class="results hidden">
-            <h2>Résultats</h2>
-            <div id="resultsContent"></div>
-        </div>
+      <div class="logo">
+        <i class="fas fa-universal-access"></i>
+        <span>Handicap Info</span>
+      </div>
+      <nav class="nav-menu">
+        <a href="#">Accueil</a>
+        <a href="#">À propos</a>
+        <a href="#">Contact</a>
+      </nav>
     </div>
-
-    <script src="./script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Des réponses à vos questions administratives</h1>
+        <p>Posez votre question sur les procédures administratives pour le handicap en France et obtenez des réponses claires et précises.</p>
+      </div>
+    </section>
+    <section class="search-section">
+      <div class="search-card">
+        <textarea id="questionInput" placeholder="Entrez votre question ici..."></textarea>
+        <button onclick="performSearch()">
+          <i class="fas fa-search"></i>
+          <span>Lancer la recherche</span>
+        </button>
+      </div>
+    </section>
+    <section id="loading" class="loading-section hidden">
+      <div class="spinner"></div>
+      <p>Recherche en cours...</p>
+    </section>
+    <section id="results" class="results-section hidden">
+      <div class="results-header">
+        <h2>Résultats</h2>
+        <button class="reset-btn" onclick="resetSearch()">
+          <i class="fas fa-redo-alt"></i>
+          <span>Nouvelle recherche</span>
+        </button>
+      </div>
+      <div id="resultsContent" class="results-content"></div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2025 Handicap Info. Tous droits réservés.</p>
+    </div>
+  </footer>
+  <script src="./script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
 </body>
 </html>
