@@ -123,13 +123,11 @@ def recherche_administratives_handicap(question_utilisateur):
 if __name__ == "__main__":
     # Quelques exemples de questions
     questions = [
-        """
         "Comment obtenir un accompagnement administratif pour des aménagements au travail ?",
         "Quelles sont les démarches pour obtenir une reconnaissance de la qualité de travailleur handicapé ?",
         "Quels sont les droits des personnes handicapées en matière de logement ?",
         "Comment faire une demande de carte d'invalidité ?",
         "Quels sont les recours possibles en cas de refus de la MDPH ?",
-        """
         "Comment bénéficier d'une aide financière pour l'aménagement du domicile ?",
         "Pourquoi le ciel est-il bleu ?",   
         "Comment cuisiner des pâtes ?",
@@ -145,7 +143,9 @@ if __name__ == "__main__":
             print(f"Mots-clés extraits : {keywords}")
             
             # Recherche administrative
-            resultat = recherche_administratives_handicap(question)
+            resultat = recherche_administratives_handicap(keywords)
+            print("Résultat de la recherche :")
+            print(resultat)
         else:
             print("La question posée n'est pas légitime.")
             resultat = "La question posée n'est pas légitime."

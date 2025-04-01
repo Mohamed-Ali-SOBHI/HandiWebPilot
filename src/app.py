@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from src.recherche_administratives_handicap import recherche_administratives_handicap
+from src.recherche_administratives_handicap import recherche_administratives_handicap, is_legit_question, generate_search_query
 import os
 from datetime import datetime
 import logging
@@ -54,7 +54,13 @@ def search():
         app.logger.info(f"Recherche initiée: {question}")
 
         # Exécution de la recherche
-        result = recherche_administratives_handicap(question)
+        if is_legit_question(question) != "legit":
+            app.logger.warning(f"Question non légitime: {question}")
+            return jsonify({"error": "La question posée n'est pas légitime"}), 400
+        # Génération de la requête de recherche
+        keywords = generate_search_query(question)
+        result = recherche_administratives_handicap(keywords)
+        app.logger.info(f"Mots-clés extraits: {keywords}")
 
         # Vérification du résultat
         if "Une erreur s'est produite" in result:
