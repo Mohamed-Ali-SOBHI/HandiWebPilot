@@ -59,7 +59,7 @@ def search():
             return jsonify({"error": "La question posée n'est pas légitime"}), 400
         # Génération de la requête de recherche
         keywords = generate_search_query(question)
-        result = recherche_administratives_handicap(keywords)
+        result = recherche_administratives_handicap(question +" " + keywords)
         app.logger.info(f"Mots-clés extraits: {keywords}")
 
         # Vérification du résultat

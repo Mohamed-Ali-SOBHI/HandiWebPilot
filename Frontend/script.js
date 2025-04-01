@@ -87,3 +87,33 @@ async function performSearch() {
       performSearch();
     }
   });
+
+// Add this new function for handling contact form submission
+function handleContactFormSubmission(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const formData = new FormData(form);
+
+    fetch('sendmail.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        showNotification(data);
+        if (data.includes("Thank You")) {
+            form.reset();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Une erreur est survenue lors de l\'envoi du message.');
+    });
+}
+
+function setQuestion(question) {
+  const questionInput = document.getElementById('questionInput');
+  questionInput.value = question;
+  performSearch();
+}
