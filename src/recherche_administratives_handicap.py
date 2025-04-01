@@ -3,6 +3,29 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
+
+def is_legit_question(question_utilisateur):  
+    """
+    Vérifie si la question posée par l'utilisateur est légitime ou non.
+    
+    :param question_utilisateur: La question spécifique de l'utilisateur
+    :return: "legit" ou "not_legit" selon la classification
+    """
+    load_dotenv()
+    api_key = os.getenv("OPENAI_API_KEY")
+    client = OpenAI(api_key=api_key)
+
+    categories = "{\n  \"legit\": \"the usre ask a legit question about disability in France\",\n  \"not_legit\": \"the user ask a not legit question about disability in France\"\n}"
+    response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": f"You will be provided with input text from a user. Classify the intent into one of these categories:\n{categories}\n\nOnly output the category name, without any additional text."},
+        {"role": "user", "content": question_utilisateur}
+        ]
+    )  
+
+    return response.choices[0].message.content
+
 def generate_search_query(question_utilisateur):
     """
     Extrait les mots-clés d'une question utilisateur pour une recherche optimisée.
@@ -10,16 +33,19 @@ def generate_search_query(question_utilisateur):
     :param question_utilisateur: La question spécifique de l'utilisateur
     :return: Liste de mots-clés extraits
     """
-    pass
-
-def generate_response_from_search(response):
-    """
-    Génère une réponse à partir des résultats de recherche.
+    load_dotenv()
+    api_key = os.getenv("OPENAI_API_KEY")
+    client = OpenAI(api_key=api_key)
     
-    :param response: Résultats de la recherche
-    :return: Réponse formatée
-    """
-    pass
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": f"You will be provided with a user query. Your goal is to extract a few keywords from the text to perform a search.\nKeep the search query to a few keywords that capture the user's intent.\nOnly output the keywords, without any additional text."},
+            {"role": "user", "content": question_utilisateur + "\n\nKeywords:"}
+        ]
+    )  
+    return response.choices[0].message.content
+
 
 def recherche_administratives_handicap(question_utilisateur):
     """
@@ -97,16 +123,30 @@ def recherche_administratives_handicap(question_utilisateur):
 if __name__ == "__main__":
     # Quelques exemples de questions
     questions = [
+        """
         "Comment obtenir un accompagnement administratif pour des aménagements au travail ?",
         "Quelles sont les démarches pour obtenir une reconnaissance de la qualité de travailleur handicapé ?",
         "Quels sont les droits des personnes handicapées en matière de logement ?",
         "Comment faire une demande de carte d'invalidité ?",
         "Quels sont les recours possibles en cas de refus de la MDPH ?",
+        """
         "Comment bénéficier d'une aide financière pour l'aménagement du domicile ?",
+        "Pourquoi le ciel est-il bleu ?",   
+        "Comment cuisiner des pâtes ?",
     ]
     
     # Exécution de la recherche pour chaque question
     for question in questions:
         print(f"\n--- Recherche pour : {question} ---")
-        resultat = recherche_administratives_handicap(question)
+        # Vérification de la légitimité de la question
+        if is_legit_question(question) == "legit":
+            # Génération de la requête de recherche
+            keywords = generate_search_query(question)
+            print(f"Mots-clés extraits : {keywords}")
+            
+            # Recherche administrative
+            resultat = recherche_administratives_handicap(question)
+        else:
+            print("La question posée n'est pas légitime.")
+            resultat = "La question posée n'est pas légitime."
         print(resultat)
