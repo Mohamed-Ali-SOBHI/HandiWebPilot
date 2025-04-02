@@ -242,8 +242,7 @@ main {
 
 .results-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid var(--background-color);
@@ -260,7 +259,7 @@ main {
   border: 2px solid var(--secondary-color);
   color: var(--secondary-color);
   padding: 0.75rem 1.5rem;
-  border-radius: 12px;
+  border-radius: 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -317,18 +316,6 @@ main {
 .results-content p {
   margin-bottom: 1.5rem;
   color: #374151;
-}
-
-.results-content ul, 
-.results-content ol {
-  margin: 1.5rem 0;
-  padding-left: 2.5rem;
-}
-
-.results-content li {
-  margin-bottom: 0.75rem;
-  position: relative;
-  padding-left: 0.5rem;
 }
 
 .results-content a {
@@ -435,6 +422,11 @@ main {
   .results-content h3 {
     font-size: 1.15rem;
   }
+
+  .reset-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* Animation d'apparition */
@@ -490,16 +482,6 @@ main {
 
 .results-content p {
   margin-bottom: 1rem;
-}
-
-.results-content ul, 
-.results-content ol {
-  margin: 1rem 0;
-  padding-left: 2rem;
-}
-
-.results-content li {
-  margin-bottom: 0.5rem;
 }
 
 .results-content a {

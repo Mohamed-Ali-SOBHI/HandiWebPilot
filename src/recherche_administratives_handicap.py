@@ -15,7 +15,7 @@ def is_legit_question(question_utilisateur):
     api_key = os.getenv("OPENAI_API_KEY")
     client = OpenAI(api_key=api_key)
 
-    categories = "{\n  \"legit\": \"the usre ask a legit question about disability in France\",\n  \"not_legit\": \"the user ask a not legit question about disability in France\"\n}"
+    categories = "{\n  \"legit\": \"the user ask a legit question about disability in France\",\n  \"not_legit\": \"the user ask a not legit question about disability in France\"\n}"
     response = client.chat.completions.create(
     model="gpt-4o-mini",
     messages=[
@@ -56,39 +56,50 @@ def recherche_administratives_handicap(question_utilisateur):
     :return: Le contenu de la recherche
     """
     # Préparation du prompt en français
-    prompt = f"""Nous sommes le {datetime.now().strftime("%Y-%m-%d")}. Réalisez une recherche approfondie sur les procédures administratives pour les personnes en situation de handicap en France, en répondant précisément à la question suivante : "{question_utilisateur}"
+    prompt = f"""Nous sommes le {datetime.now().strftime("%Y-%m-%d")}. Réalisez une recherche approfondie sur l'écosystème complet de soutien aux personnes en situation de handicap en France, en répondant précisément à la question suivante : "{question_utilisateur}"
 
     Objectifs de la recherche :
-    • Périmètre : Examiner le paysage administratif lié à la requête, en se concentrant sur :
-        - Les processus de la MDPH (Maison Départementale des Personnes Handicapées)
-        - Les mécanismes de soutien nationaux et locaux pertinents
-        - Les cadres juridiques et administratifs spécifiques
-        - Les associations de soutien et ressources importantes
+    - Périmètre élargi : Examiner l'ensemble des ressources disponibles liées à la requête, incluant :
+        - Les processus administratifs (MDPH, CAF, CPAM, etc.)
+        - Les associations spécialisées (nationales et locales)
+        - Les entreprises proposant des services ou produits adaptés
+        - Les dispositifs d'aide privés et publics
+        - Les plateformes numériques et applications dédiées
+        - Les réseaux d'entraide et communautés en ligne
 
-    • Analyse détaillée : Exploration approfondie :
-        - Étapes procédurales spécifiques liées à la question
-        - Types de soutiens administratifs et d'assistance applicables
-        - Conseils pratiques et solutions potentielles
-        - Développements récents ou changements dans le domaine concerné
+    - Analyse multidimensionnelle :
+        - Solutions administratives officielles
+        - Alternatives associatives et privées
+        - Innovations technologiques et services émergents
+        - Témoignages et retours d'expérience pertinents
+        - Astuces pratiques issues du terrain
 
-    • Perspectives critiques : Évaluer :
-        - Forces et limites potentielles des systèmes de soutien existants
-        - Défis pratiques dans le traitement de la préoccupation spécifique
-        - Voies potentielles de résolution ou de soutien
+    - Perspectives holistiques :
+        - Complémentarité entre les différents types de soutien
+        - Approches innovantes et bonnes pratiques
+        - Solutions de contournement face aux obstacles courants
+        - Comparaison des options disponibles (avantages/inconvénients)
 
-    • Approche centrée sur l'utilisateur : Traduire les informations administratives complexes en conseils clairs et actionnables
+    - Orientation concrète :
+        - Contacts directs et personnes ressources
+        - Numéros d'urgence ou d'assistance spécialisés
+        - Groupes de soutien et forums recommandés
+        - Événements, salons ou rencontres à connaître
+        - Formations et ateliers pertinents
 
-    • Compilation exhaustive des ressources :
-        - Coordonnées détaillées des institutions pertinentes
-        - Liens vers des ressources officielles et formulaires de demande
-        - Conseils pratiques pour naviguer dans le processus administratif
+    - Compilation exhaustive :
+        - Coordonnées détaillées de tous les acteurs pertinents
+        - Liens vers plateformes et outils numériques utiles
+        - Exemples de parcours réussis
+        - Documentation à consulter (guides, tutoriels, vidéos explicatives)
 
-    • Documentation transparente :
-        - Citations compréhensives
-        - Références à des sources officielles
-        - Informations vérifiables provenant d'institutions réputées
+    - Documentation transparente :
+        - Diversité des sources (officielles, associatives, témoignages)
+        - Indications sur la fiabilité et l'actualité des informations
+        - Mention des controverses ou débats existants
+        - Alternatives en cas d'impasse
 
-    # Procédures administratives pour le handicap en France : {question_utilisateur}
+    # Écosystème complet de soutien au handicap en France : {question_utilisateur}
     """
     
     load_dotenv()
@@ -107,10 +118,9 @@ def recherche_administratives_handicap(question_utilisateur):
                     }
                 },
             },
-            messages=[{
-                "role": "user",
-                "content": prompt,
-            }],
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": question_utilisateur,}],
         )
         
         # Retourne le contenu de la réponse
