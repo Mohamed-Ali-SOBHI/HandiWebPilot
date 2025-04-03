@@ -376,7 +376,7 @@ main {
 }
 
 .results-content th,
-.results-content td {
+results-content td {
   padding: 1rem;
   border: 1px solid #e2e8f0;
 }
@@ -392,16 +392,6 @@ main {
 
 .results-content tr:hover {
   background-color: #f8fafc;
-}
-
-/* Style pour les listes à puces personnalisées */
-.results-content ul li::before {
-  content: "•";
-  color: var(--secondary-color);
-  font-weight: bold;
-  display: inline-block;
-  width: 1em;
-  margin-left: -1em;
 }
 
 /* Ajout d'espacement pour la lisibilité sur mobile */
@@ -807,4 +797,239 @@ main {
   .suggestion-cards {
     grid-template-columns: 1fr;
   }
+}
+
+/* Styles pour le modal de clarification */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+}
+
+.modal-container {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-container {
+  transform: translateY(0);
+}
+
+.modal-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e2e8f0;
+  position: relative;
+  text-align: center;
+}
+
+.modal-header h3 {
+  color: var(--primary-color);
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+/* Animation d'entrée pour le header */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-overlay.active .modal-header {
+  animation: slideDown 0.4s ease-out forwards;
+}
+
+.clarification-question {
+  margin-bottom: 1.5rem;
+}
+
+.clarification-question label {
+  display: block;
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+
+.clarification-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: var(--transition);
+  resize: vertical;
+  min-height: 60px;
+}
+
+.clarification-input:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.modal-footer button {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.btn-outline:hover {
+  background: var(--secondary-color);
+  color: var(--white);
+}
+
+.btn-primary {
+  background: var(--secondary-color);
+  border: none;
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+/* Styles pour l'affichage des clarifications dans les résultats */
+.clarifications-summary {
+  background: #f8fafc;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--secondary-color);
+}
+
+.clarifications-summary h3 {
+  color: var(--primary-color);
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.clarifications-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.clarifications-list li {
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.clarifications-list li:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.clarifications-list li strong {
+  color: var(--secondary-color);
+  margin-right: 0.5rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .modal-container {
+    padding: 1.5rem;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+  }
+
+  .modal-footer button {
+    width: 100%;
+  }
+}
+
+/* Styles pour les cartes d'équipe */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.team-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.team-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    object-fit: cover;
+}
+
+.team-card h3 {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.team-role {
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.team-description {
+    color: var(--text-color);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .team-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
 }
