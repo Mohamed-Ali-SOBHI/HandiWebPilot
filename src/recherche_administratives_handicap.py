@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -15,7 +16,7 @@ def is_legit_question(question_utilisateur):
     api_key = os.getenv("OPENAI_API_KEY")
     client = OpenAI(api_key=api_key)
 
-    categories = "{\n  \"legit\": \"the user ask a legit question about disability in France\",\n  \"not_legit\": \"the user ask a not legit question about disability in France\"\n}"
+    categories = "{\n  \"legit\": \"the user asks a legit question about disability in France\",\n  \"not_legit\": \"the user asks a not legit question about disability in France\"\n}"
     response = client.chat.completions.create(
     model="gpt-4o-mini",
     messages=[
@@ -26,37 +27,98 @@ def is_legit_question(question_utilisateur):
 
     return response.choices[0].message.content
 
-def generate_search_query(question_utilisateur):
+
+def check_clarification_needed(question_utilisateur):
+    """
+    Détermine si la question de l'utilisateur nécessite des précisions avant la recherche.
+    
+    :param question_utilisateur: La question spécifique de l'utilisateur
+    :return: Un tuple (besoin_clarification, questions_précision) où besoin_clarification est un booléen
+             et questions_précision est une liste de questions à poser à l'utilisateur
+    """
+    load_dotenv()
+    api_key = os.getenv("OPENAI_API_KEY")
+    client = OpenAI(api_key=api_key)
+    
+    prompt = """Analysez la question suivante concernant le handicap en France et déterminez si des précisions sont nécessaires pour effectuer une recherche pertinente. 
+                
+                Si la question est suffisamment précise, répondez avec un JSON au format:
+                {"needs_clarification": false, "questions": []}
+
+                Si la question manque de précisions, répondez avec un JSON au format:
+                {"needs_clarification": true, "questions": ["Question 1?", "Question 2?", ...]}
+
+                Les questions de précision doivent être formulées en français et de manière respectueuse. Elles doivent aider à:
+                - Clarifier le type de handicap concerné si pertinent
+                - Préciser la situation géographique (département/région) si nécessaire
+                - Comprendre le contexte spécifique (âge, situation professionnelle, etc.)
+                - Obtenir des détails sur les besoins précis de la personne
+                - Identifier si la demande concerne une personne précise ou une information générale
+
+                Limitez-vous à 2-3 questions de précision maximum, les plus importantes."""
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        response_format={"type": "json_object"},
+        messages=[
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": question_utilisateur}
+        ]
+    )
+    
+    result = json.loads(response.choices[0].message.content)
+    return result["needs_clarification"], result["questions"]
+
+
+
+def generate_search_query(question_utilisateur, clarifications=None):
     """
     Extrait les mots-clés d'une question utilisateur pour une recherche optimisée.
     
     :param question_utilisateur: La question spécifique de l'utilisateur
+    :param clarifications: Dictionnaire contenant les questions de précision et les réponses
     :return: Liste de mots-clés extraits
     """
     load_dotenv()
     api_key = os.getenv("OPENAI_API_KEY")
     client = OpenAI(api_key=api_key)
     
+    # Préparation du contenu avec les précisions si disponibles
+    content = question_utilisateur
+    if clarifications:
+        content += "\n\nPrécisions apportées:\n"
+        for question, reponse in clarifications.items():
+            content += f"- Question: {question}\n  Réponse: {reponse}\n"
+    
+    content += "\n\nKeywords:"
+    
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": f"You will be provided with a user query. Your goal is to extract a few keywords from the text to perform a search.\nKeep the search query to a few keywords that capture the user's intent.\nOnly output the keywords, without any additional text."},
-            {"role": "user", "content": question_utilisateur + "\n\nKeywords:"}
+            {"role": "system", "content": "You will be provided with a user query, possibly with clarifications. Your goal is to extract a few keywords from the text to perform a search. Keep the search query to a few keywords that capture the user's intent. Only output the keywords, without any additional text."},
+            {"role": "user", "content": content}
         ]
     )  
     return response.choices[0].message.content
 
 
-def recherche_administratives_handicap(question_utilisateur):
+def recherche_administratives_handicap(question_utilisateur, clarifications=None):
     """
     Effectue une recherche comprehensive sur les procédures administratives 
     pour les personnes en situation de handicap en France.
     
     :param question_utilisateur: La question spécifique de l'utilisateur
+    :param clarifications: Dictionnaire contenant les questions de précision et les réponses
     :return: Le contenu de la recherche
     """
-    # Préparation du prompt en français
-    prompt = f"""Nous sommes le {datetime.now().strftime("%Y-%m-%d")}. Réalisez une recherche approfondie sur l'écosystème complet de soutien aux personnes en situation de handicap en France, en répondant précisément à la question suivante : "{question_utilisateur}"
+    # Préparation du prompt en français avec les précisions si disponibles
+    question_complete = question_utilisateur
+    if clarifications:
+        question_complete += "\n\nPrécisions supplémentaires :"
+        for question, reponse in clarifications.items():
+            question_complete += f"\n- {question}: {reponse}"
+    
+    prompt = f"""Nous sommes le {datetime.now().strftime("%Y-%m-%d")}. Réalisez une recherche approfondie sur l'écosystème complet de soutien aux personnes en situation de handicap en France, en répondant précisément à la question suivante : "{question_complete}"
 
     Objectifs de la recherche :
     - Périmètre élargi : Examiner l'ensemble des ressources disponibles liées à la requête, incluant :
@@ -99,7 +161,7 @@ def recherche_administratives_handicap(question_utilisateur):
         - Mention des controverses ou débats existants
         - Alternatives en cas d'impasse
 
-    # Écosystème complet de soutien au handicap en France : {question_utilisateur}
+    # Écosystème complet de soutien au handicap en France : {question_complete}
     """
     
     load_dotenv()
@@ -120,7 +182,7 @@ def recherche_administratives_handicap(question_utilisateur):
             },
             messages=[
                 {"role": "system", "content": prompt},
-                {"role": "user", "content": question_utilisateur,}],
+                {"role": "user", "content": question_complete,}],
         )
         
         # Retourne le contenu de la réponse
@@ -129,34 +191,51 @@ def recherche_administratives_handicap(question_utilisateur):
     except Exception as e:
         return f"Une erreur s'est produite : {str(e)}"
 
+
+def process_user_query(question_utilisateur):
+    """
+    Traite une question utilisateur avec le processus complet : vérification de légitimité,
+    demande de précisions si nécessaire, puis recherche.
+    
+    :param question_utilisateur: La question spécifique de l'utilisateur
+    :return: Le résultat de la recherche ou un message d'erreur
+    """
+    print(f"\n--- Traitement de la question : {question_utilisateur} ---")
+    
+    # Détection de la nécessité de clarifications
+    needs_clarification, clarification_questions = check_clarification_needed(question_utilisateur)
+
+    # Vérification de la légitimité de la question
+    if is_legit_question(question_utilisateur) != "legit":
+        return "La question posée n'est pas liée au handicap en France."
+        
+    clarifications = {}
+    if needs_clarification:
+        print("Des précisions sont nécessaires pour mieux répondre à votre question :")
+        for i, question in enumerate(clarification_questions, 1):
+            print(f"{i}. {question}")
+            # Dans un environnement réel, vous récupéreriez la réponse de l'utilisateur
+            # Simulation pour cet exemple
+            reponse = input(f"Votre réponse à la question {i}: ")
+            clarifications[question] = reponse
+    
+    # Génération de la requête de recherche optimisée
+    keywords = generate_search_query(question_utilisateur, clarifications)
+    print(f"Mots-clés extraits pour la recherche : {keywords}")
+    
+    # Recherche avec les précisions
+    return recherche_administratives_handicap(question_utilisateur, clarifications)
+
+
 # Exemple d'utilisation
 if __name__ == "__main__":
     # Quelques exemples de questions
     questions = [
-        "Comment obtenir un accompagnement administratif pour des aménagements au travail ?",
-        "Quelles sont les démarches pour obtenir une reconnaissance de la qualité de travailleur handicapé ?",
-        "Quels sont les droits des personnes handicapées en matière de logement ?",
-        "Comment faire une demande de carte d'invalidité ?",
-        "Quels sont les recours possibles en cas de refus de la MDPH ?",
-        "Comment bénéficier d'une aide financière pour l'aménagement du domicile ?",
-        "Pourquoi le ciel est-il bleu ?",   
-        "Comment cuisiner des pâtes ?",
+        "Transport à Paris ?",
     ]
     
-    # Exécution de la recherche pour chaque question
-    for question in questions:
-        print(f"\n--- Recherche pour : {question} ---")
-        # Vérification de la légitimité de la question
-        if is_legit_question(question) == "legit":
-            # Génération de la requête de recherche
-            keywords = generate_search_query(question)
-            print(f"Mots-clés extraits : {keywords}")
-            
-            # Recherche administrative
-            resultat = recherche_administratives_handicap(keywords)
-            print("Résultat de la recherche :")
-            print(resultat)
-        else:
-            print("La question posée n'est pas légitime.")
-            resultat = "La question posée n'est pas légitime."
-        print(resultat)
+    # Exécution interactive avec une seule question pour démonstration
+    question = input("Entrez votre question sur le handicap en France : ")
+    resultat = process_user_query(question)
+    print("\nRésultat de la recherche :")
+    print(resultat)
