@@ -394,16 +394,6 @@ main {
   background-color: #f8fafc;
 }
 
-/* Style pour les listes à puces personnalisées */
-.results-content ul li::before {
-  content: "•";
-  color: var(--secondary-color);
-  font-weight: bold;
-  display: inline-block;
-  width: 1em;
-  margin-left: -1em;
-}
-
 /* Ajout d'espacement pour la lisibilité sur mobile */
 @media (max-width: 768px) {
   .results-content {
