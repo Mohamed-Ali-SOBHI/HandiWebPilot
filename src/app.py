@@ -93,7 +93,7 @@ def search():
         if clarifications:
             app.logger.info(f"Avec précisions: {clarifications}")
                 
-        combined_text = question + " " + " ".join(clarifications)
+        combined_text = "la question: " + question + " et les précisions: " + str(clarifications)
                 
         # Recherche avec précisions
         if is_legit_question(combined_text) == "not_legit":
