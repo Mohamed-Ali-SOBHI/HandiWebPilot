@@ -300,39 +300,39 @@ document.getElementById('questionInput').addEventListener('keydown', function(ev
   }
 });
 
-// Fonction pour le traitement du formulaire de contact
-function handleContactFormSubmission(event) {
-    event.preventDefault();
+// Ajouter un événement pour charger le jeton CSRF et configurer le formulaire
+document.addEventListener('DOMContentLoaded', function() {
+    loadSearchResults();
     
-    const form = document.getElementById('contactForm');
-    const formData = new FormData(form);
-
-    fetch('sendmail.php', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        credentials: 'same-origin'
-    })
-    .then(async response => {
-        const text = await response.text();
-        if (!response.ok) {
-            throw new Error(text || response.statusText);
-        }
-        return text;
-    })
-    .then(data => {
-        showNotification(data);
-        if (!data.includes('invalide') && !data.includes('erreur')) {
-            form.reset();
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showNotification(error.message || 'Une erreur est survenue lors de l\'envoi du message.');
-    });
-}
+    // Charger le jeton CSRF si on est sur la page de contact
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        // Chargement du jeton CSRF
+        fetch('init_session.php')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur lors du chargement du jeton CSRF');
+                }
+                return response.text();
+            })
+            .then(token => {
+                if (token && token.trim() !== '') {
+                    document.getElementById('csrf_token').value = token.trim();
+                    console.log('Jeton CSRF chargé avec succès');
+                } else {
+                    console.error('Le jeton CSRF reçu est vide');
+                    showNotification('Erreur de sécurité: impossible de charger le jeton CSRF');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur CSRF:', error);
+                showNotification('Erreur de sécurité: impossible de charger le jeton CSRF');
+            });
+        
+        // Ajout de l'écouteur d'événement pour la soumission du formulaire
+        contactForm.addEventListener('submit', handleContactFormSubmission);
+    }
+});
 
 function setQuestion(question) {
   const questionInput = document.getElementById('questionInput');
@@ -340,16 +340,68 @@ function setQuestion(question) {
   performSearch();
 }
 
-// Ajoutez cet écouteur d'événements à la fin du fichier
+// Fonction pour gérer la soumission du formulaire de contact
+function handleContactFormSubmission(event) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    
+    // Changer le texte du bouton pour indiquer le chargement
+    submitButton.textContent = 'Envoi en cours...';
+    submitButton.disabled = true;
+    
+    // Préparer les données du formulaire
+    const formData = new FormData(form);
+    
+    // Envoyer la requête
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erreur réseau');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Afficher un message de succès
+            showNotification(data.message);
+            
+            // Réinitialiser le formulaire
+            form.reset();
+        } else {
+            // Afficher les erreurs
+            let errorMessage = data.message || 'Une erreur est survenue';
+            
+            if (data.errors && data.errors.length > 0) {
+                errorMessage += ': ' + data.errors.join(', ');
+            }
+            
+            showNotification(errorMessage);
+        }
+    })
+    .catch(error => {
+        console.error('Erreur lors de l\'envoi du formulaire:', error);
+        showNotification('Une erreur est survenue lors de l\'envoi du message. Veuillez réessayer plus tard.');
+    })
+    .finally(() => {
+        // Restaurer le texte original du bouton
+        submitButton.textContent = originalButtonText;
+        submitButton.disabled = false;
+    });
+}
+
+// Modifiez également la partie du DOMContentLoaded pour supprimer la partie CSRF
 document.addEventListener('DOMContentLoaded', function() {
     loadSearchResults();
     
-    // Charger le jeton CSRF si on est sur la page de contact
-    if (document.getElementById('contactForm')) {
-        fetch('init_session.php')
-            .then(response => response.text())
-            .then(token => {
-                document.getElementById('csrf_token').value = token;
-            });
+    // Ajouter l'écouteur d'événement pour la soumission du formulaire de contact
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleContactFormSubmission);
     }
 });
