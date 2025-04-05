@@ -95,7 +95,7 @@ def search():
         
         keywords = generate_search_query(question, clarifications)
         
-        combined_text = question + " " + " ".join(clarifications.values()) + " " + " ".join(keywords)
+        combined_text = question + " " + " ".join(clarifications) + " " + " ".join(keywords).strip()
         # Exécution de la recherche
         if is_legit_question(combined_text):
             # Génération de la requête de recherche avec les précisions
