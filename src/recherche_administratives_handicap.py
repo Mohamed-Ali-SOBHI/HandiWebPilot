@@ -5,27 +5,36 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 
-def is_legit_question(question_utilisateur):  
+def is_legit_question(question: str, clarifications: dict = None) -> bool:
     """
-    Vérifie si la question posée par l'utilisateur est légitime ou non.
+    Vérifie si la question est légitime (liée au handicap en France)
+    Args:
+        question (str): La question posée
+        clarifications (dict): Les précisions apportées à la question
+    Returns:
+        bool: True si la question est légitime, False sinon
+    """
+    # Mots-clés liés au handicap
+    handicap_keywords = [
+        'handicap', 'invalidité', 'pmr', 'aeeh', 'aah', 'mdph', 'rqth',
+        'accessibilité', 'mobilité réduite', 'allocation', 'carte mobilité',
+        'reconnaissance', 'travailleur handicapé', 'pcf', 'déficience'
+    ]
+
+    # Conversion en minuscules
+    question = question.lower()
     
-    :param question_utilisateur: La question spécifique de l'utilisateur
-    :return: "legit" ou "not_legit" selon la classification
-    """
-    load_dotenv()
-    api_key = os.getenv("OPENAI_API_KEY")
-    client = OpenAI(api_key=api_key)
-
-    categories = "{\n  \"legit\": \"the user asks a legit question about disability in France\",\n  \"not_legit\": \"the user asks a not legit question about disability in France\"\n}"
-    response = client.chat.completions.create(
-    model="gpt-4o-mini",
-    messages=[
-        {"role": "system", "content": f"You will be provided with input text from a user. Classify the intent into one of these categories:\n{categories}\n\nOnly output the category name, without any additional text."},
-        {"role": "user", "content": question_utilisateur}
-        ]
-    )  
-
-    return response.choices[0].message.content
+    # Vérification dans la question
+    if any(keyword in question for keyword in handicap_keywords):
+        return True
+        
+    # Vérification dans les précisions si fournies
+    if clarifications:
+        clarifications_text = ' '.join(str(value) for value in clarifications.values()).lower()
+        if any(keyword in clarifications_text for keyword in handicap_keywords):
+            return True
+            
+    return False
 
 
 def check_clarification_needed(question_utilisateur):
@@ -206,7 +215,7 @@ def process_user_query(question_utilisateur):
     needs_clarification, clarification_questions = check_clarification_needed(question_utilisateur)
 
     # Vérification de la légitimité de la question
-    if is_legit_question(question_utilisateur) != "legit":
+    if not is_legit_question(question_utilisateur):
         return "La question posée n'est pas liée au handicap en France."
         
     clarifications = {}

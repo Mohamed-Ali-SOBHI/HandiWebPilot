@@ -94,12 +94,15 @@ def search():
             app.logger.info(f"Avec précisions: {clarifications}")
         
         # Exécution de la recherche
-        if is_legit_question(question) != "legit":
+        if is_legit_question(question, clarifications):
+            # Génération de la requête de recherche avec les précisions
+            keywords = generate_search_query(question, clarifications)
+            app.logger.info(f"Mots-clés extraits: {keywords}")
+        else:
             app.logger.warning(f"Question non légitime: {question}")
             return jsonify({"error": "La question posée n'est pas liée au handicap en France"}), 400
             
         # Génération de la requête de recherche avec les précisions
-        keywords = generate_search_query(question, clarifications)
         app.logger.info(f"Mots-clés extraits: {keywords}")
         
         # Recherche avec précisions
