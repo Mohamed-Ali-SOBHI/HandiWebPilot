@@ -93,10 +93,12 @@ def search():
         if clarifications:
             app.logger.info(f"Avec précisions: {clarifications}")
         
+        keywords = generate_search_query(question, clarifications)
+        
+        combined_text = question + " " + " ".join(clarifications.values()) + " " + " ".join(keywords)
         # Exécution de la recherche
-        if is_legit_question(question, clarifications):
+        if is_legit_question(combined_text):
             # Génération de la requête de recherche avec les précisions
-            keywords = generate_search_query(question, clarifications)
             app.logger.info(f"Mots-clés extraits: {keywords}")
         else:
             app.logger.warning(f"Question non légitime: {question}")
