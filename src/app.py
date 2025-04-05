@@ -92,23 +92,15 @@ def search():
         app.logger.info(f"Recherche initiée: {question}")
         if clarifications:
             app.logger.info(f"Avec précisions: {clarifications}")
-        
-        keywords = generate_search_query(question, clarifications)
-        
-        combined_text = question + " " + " ".join(clarifications) + " " + " ".join(keywords).strip()
-        # Exécution de la recherche
-        if is_legit_question(combined_text):
-            # Génération de la requête de recherche avec les précisions
-            app.logger.info(f"Mots-clés extraits: {keywords}")
-        else:
-            app.logger.warning(f"Question non légitime: {question}")
-            return jsonify({"error": "La question posée n'est pas liée au handicap en France"}), 400
-            
-        # Génération de la requête de recherche avec les précisions
-        app.logger.info(f"Mots-clés extraits: {keywords}")
-        
+                
+        combined_text = question + " " + " ".join(clarifications)
+                
         # Recherche avec précisions
-        result = recherche_administratives_handicap(question, clarifications)
+        if is_legit_question(combined_text) == "legit":
+            result = recherche_administratives_handicap(question, clarifications)
+        else:
+            app.logger.warning(f"Question non légitime: {combined_text}")
+            return jsonify({"error": "La question posée n'est pas liée au handicap en France"}), 400
         
         # Vérification du résultat
         if "Une erreur s'est produite" in result:
