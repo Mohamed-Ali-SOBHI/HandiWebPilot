@@ -99,9 +99,9 @@ def search():
         if is_legit_question(combined_text) == "not_legit":
             app.logger.warning(f"Question non légitime: {combined_text}")
             return jsonify({"error": "La question posée n'est pas liée au handicap en France"}), 400
-        else:
-            app.logger.info(f"Question légitime: {combined_text}")
-            result = recherche_administratives_handicap(question, clarifications)
+    
+        app.logger.info(f"Question légitime: {combined_text}")
+        result = recherche_administratives_handicap(question, clarifications)
         
         # Vérification du résultat
         if "Une erreur s'est produite" in result:
