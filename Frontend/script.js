@@ -210,8 +210,8 @@ async function executeSearch(question, clarifications = null) {
       });
       
       if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Erreur ${response.status}: ${errorText}`);
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Une erreur est survenue');
       }
       
       const data = await response.json();
@@ -223,21 +223,19 @@ async function executeSearch(question, clarifications = null) {
       if (data.error) {
           formattedResult = createErrorMessage(data.error);
       } else {
-          // Ajouter le résultat formaté
           formattedResult += formatResponse(data.result);
       }
       
       resultsContent.innerHTML = formattedResult;
       results.scrollIntoView({ behavior: 'smooth' });
       
-      // Sauvegarder les résultats
       saveSearchResults(question, clarifications, data.result);
       
   } catch (error) {
       console.error('Erreur de recherche:', error);
       loading.classList.add('hidden');
       results.classList.remove('hidden');
-      resultsContent.innerHTML = createErrorMessage(`Une erreur est survenue: ${error.message}`);
+      resultsContent.innerHTML = createErrorMessage(error.message);
   }
 }
 
@@ -296,6 +294,13 @@ function showNotification(message) {
 
 document.getElementById('questionInput').addEventListener('keydown', function(event) {
   if (event.ctrlKey && event.key === 'Enter') {
+      performSearch();
+  }
+});
+
+document.getElementById('questionInput').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+      event.preventDefault(); // Empêche le comportement par défaut
       performSearch();
   }
 });

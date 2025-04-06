@@ -27,6 +27,7 @@ def is_legit_question(question: str) -> bool:
             ]
         )  
     response = response.choices[0].message.content
+    return response
 
 
 def check_clarification_needed(question_utilisateur):

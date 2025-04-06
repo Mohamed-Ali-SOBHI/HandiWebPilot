@@ -1033,3 +1033,38 @@ results-content td {
         gap: 1.5rem;
     }
 }
+
+/* Styles pour les messages d'erreur */
+.error-message {
+  background-color: #fee2e2;
+  border: 2px solid #ef4444;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 1rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  color: #991b1b;
+}
+
+.error-message i {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.error-message p {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+/* Animation pour les messages d'erreur */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.error-message {
+  animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
+}
