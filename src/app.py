@@ -96,7 +96,7 @@ def search():
         combined_text = "la question: " + question + " et les précisions: " + str(clarifications)
                 
         # Recherche avec précisions
-        if is_legit_question(combined_text) == "not_legit":
+        if is_legit_question(combined_text) != "legit":
             app.logger.warning(f"Question non légitime: {combined_text}")
             return jsonify({"error": "La question posée n'est pas liée au handicap en France"}), 400
     
